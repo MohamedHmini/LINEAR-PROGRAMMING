@@ -1,4 +1,6 @@
-
+/////////////////////////////
+/// MOHAMED-HMINI //////////////////////////
+//////// 2019-2020 //////////
 
 
 #ifndef MATRIX_H
@@ -16,6 +18,9 @@ typedef struct MATRIX{
 
 MATRIX* Matrix(int,int,float);
 MATRIX* identityOf(int);
+MATRIX* sequence(int,int); // args : from, to 
+int in(MATRIX, float);
+MATRIX* not_in_sequence(MATRIX, int);
 MATRIX* copy(MATRIX);
 void fmatrix(MATRIX*);
 void pmatrix(MATRIX);
@@ -28,6 +33,8 @@ MATRIX* sub(MATRIX, MATRIX);
 MATRIX* inv(MATRIX);
 MATRIX* merge_cols(MATRIX, MATRIX);
 MATRIX* merge_rows(MATRIX, MATRIX);
+MATRIX* split_cols(MATRIX, MATRIX, int); // the int takes two values (0) for not in, (1) for in;
+MATRIX* split_rows(MATRIX, MATRIX, int); // the int takes two values (0) for not in, (1) for in;
 float det(MATRIX);
 
 

@@ -1,8 +1,12 @@
+/////////////////////////////
+/// MOHAMED-HMINI //////////////////////////
+//////// 2019-2020 //////////
+
 #include<stdio.h>
 #include<stdlib.h>
 #include "./matrix.h"
-
-
+#define TRUE 1
+#define FALSE 0
 
 
 
@@ -41,6 +45,47 @@ MATRIX* identityOf(int rank){
     return identity;
 }
 
+// not needed apparently :'( very sad 
+// i did use it for a test :D very happy 
+MATRIX* sequence(int from, int to){
+    MATRIX* seq = Matrix(1, to - from , 0);
+
+    for (int j = 0; j < seq->cols_len; j++){
+            seq->data[0][j] = from + j;
+    }
+
+    return seq;
+}
+
+
+int in(MATRIX seq, float v){
+    int is_in = FALSE;
+
+    for (int j = 0; j < seq.cols_len; j++){
+        if(seq.data[0][j] == v){
+            is_in = TRUE;
+            break;
+        }            
+    }  
+
+    return is_in;
+}
+
+// damn it -_-
+// works perfectly
+MATRIX* not_in_sequence(MATRIX seq, int bound){
+    MATRIX* new_seq = Matrix(1, bound - seq.cols_len, 0);
+    int counter = 0;
+
+    for (int j = 0; j < bound; j++){
+        if(!in(seq, j)){
+            new_seq->data[0][counter] = j;
+            counter++;
+        }
+    }
+
+    return new_seq;
+}
 
 MATRIX* copy(MATRIX m){
     MATRIX* c  = Matrix(m.rows_len, m.cols_len, 0);
@@ -78,7 +123,6 @@ void pmatrix(MATRIX m){
         printf("]\n");      
     }
 }
-
 
 
 
@@ -251,4 +295,41 @@ MATRIX* inv(MATRIX A){
 
     fmatrix(Ac);
     return Ai;
+}
+
+
+MATRIX* __split_cols_which_belong_to(MATRIX container, MATRIX indices){
+    MATRIX* splited = Matrix(container.rows_len, indices.cols_len, 0);
+
+    for (int i = 0; i < container.rows_len; i++){
+        for (int j = 0; j < indices.cols_len; j++){
+            int k = (int)indices.data[0][j];
+            splited->data[i][j] = container.data[i][k];
+        }        
+    }
+
+    return splited;
+}
+
+MATRIX* __split_cols_which_do_not_belong_to(MATRIX container, MATRIX indices){
+    MATRIX* splited = NULL;
+    MATRIX* new_indices = not_in_sequence(indices, container.cols_len);
+
+    splited = __split_cols_which_belong_to(container, *new_indices);
+
+
+    fmatrix(new_indices);
+    return splited;
+}
+
+
+MATRIX* split_cols(MATRIX container, MATRIX indices, int belongs){
+    MATRIX* splited = NULL;
+    
+    if(belongs == 1)
+        splited = __split_cols_which_belong_to(container, indices);
+    else
+        splited = __split_cols_which_do_not_belong_to(container, indices);
+
+    return splited;
 }

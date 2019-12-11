@@ -49,12 +49,14 @@ LINEAR_PROGRAM file_to_LP(char* file_path){
         i++;
     }
 
-    lp.A = NULL;
-    lp.B = matrices[0];
-    lp.R = matrices[1];
-    lp.c = matrices[2];
+    lp.A = matrices[0];
+    lp.B = NULL;
+    lp.R = NULL;
+    lp.c= matrices[1];
+    lp.cb = NULL;
+    lp.cr = NULL;
+    lp.basis_indices = matrices[2];
     lp.b = matrices[3];
-
     
     // for (i = 0; i < nbr_of_matrices; i++){
     //     fmatrix(matrices[i]);
@@ -72,11 +74,21 @@ LINEAR_PROGRAM file_to_LP(char* file_path){
 }
 
 
+void refine_LP(LINEAR_PROGRAM *lp){
+    lp->B = split_cols(*lp->A, *lp->basis_indices, 1);
+    lp->R = split_cols(*lp->A, *lp->basis_indices, 0);
+    lp->cb = split_cols(*lp->c, *lp->basis_indices, 1);
+    lp->cr = split_cols(*lp->c, *lp->basis_indices, 0);
+}
+
 
 void fLP(LINEAR_PROGRAM *s){
     fmatrix(s->A);
     fmatrix(s->B);
     fmatrix(s->R);
     fmatrix(s->c);
+    fmatrix(s->cb);
+    fmatrix(s->cr);
     fmatrix(s->b);
+    fmatrix(s->basis_indices);
 }
