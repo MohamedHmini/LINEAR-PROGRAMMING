@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LINEAR-PROGRAMMING
 
 /////////////////////////////
@@ -30,3 +31,6 @@ P.S : Examples are given in the datasets folder!
 2- run the executable main file in the following way : 
     => ./main <problem set file path>
 
+=======
+# LINEAR-PROGRAMMING (NOT DONE YET)
+>>>>>>> c02c6283b2f251ccb28ed76dd1205590e60498cf
