@@ -1,12 +1,12 @@
-# LINEAR-PROGRAMMING (NOT DONE YET)
+# LINEAR-PROGRAMMING
 
-### /////////////////////////////
-### /// MOHAMED-HMINI //////////////////////////
-### //////// 2019-2020 //////////
-### // LINEAR PROGRAMMING //
-### ///////////////////////
-### GITHUB REPO : https://github.com/MohamedHmini/LINEAR-PROGRAMMING
-### /////////////////////////////////////////////////////////////////
+#### /////////////////////////////
+#### /// MOHAMED-HMINI //////////////////////////
+#### //////// 2019-2020 //////////
+#### // LINEAR PROGRAMMING //
+#### ///////////////////////
+#### GITHUB REPO : https://github.com/MohamedHmini/LINEAR-PROGRAMMING
+#### /////////////////////////////////////////////////////////////////
 
 
 # STRUCTURE OF THE PROBLEM SET FILE : 
@@ -25,8 +25,10 @@ P.S : Examples are given in the datasets folder!
 
 # STEPS : 
 
-    1- compile the program using gcc in the following way : 
-        => gcc -o main ./Matrix/io.c ./Matrix/matrix.c ./simplex.c ./test.c
-    2- run the executable main file in the following way : 
-        => ./main <problem set file path>
+1- compile the program using gcc in the following way :
 
+```bash  gcc -o main ./Matrix/io.c ./Matrix/matrix.c ./simplex.c ./test.c ```
+
+2- run the executable main file in the following way : 
+
+```bash ./main <problem set file path>```
