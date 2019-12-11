@@ -11,7 +11,7 @@ GITHUB REPO : https://github.com/MohamedHmini/LINEAR-PROGRAMMING
 
 # STRUCTURE OF THE PROBLEM SET FILE : 
 
-    nbr of matrices
+    nbr of matrices (for now it should be only the value 4)!!!
     n m (dimensions of matrix A)
     A (space seperated) 
     n m (dimensions of vector c)
