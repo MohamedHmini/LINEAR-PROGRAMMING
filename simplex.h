@@ -21,6 +21,8 @@ typedef struct LINEAR_PROGRAM{
 LINEAR_PROGRAM file_to_LP(char*);
 void refine_LP(LINEAR_PROGRAM*);
 MATRIX* load_matrix(char**, int, int, int);
+void refine_LP(LINEAR_PROGRAM*);
+void ptableau(LINEAR_PROGRAM);
 void fLP(LINEAR_PROGRAM*);
 
 #endif
