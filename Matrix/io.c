@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h> 
 #include "./matrix.h"
-#include "./simplex.h"
 #include "./io.h"
 
 

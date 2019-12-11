@@ -1,8 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h> 
-#include "./matrix.h"
+#include "./Matrix/matrix.h"
+#include "./Matrix/io.h"
 #include "./simplex.h"
-#include "./io.h"
+
 
 
 // FILE TO SIMPLEX WORKS AS FOLLOWS : 
