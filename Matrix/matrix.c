@@ -311,6 +311,7 @@ MATRIX* __split_cols_which_belong_to(MATRIX container, MATRIX indices){
     return splited;
 }
 
+
 MATRIX* __split_cols_which_do_not_belong_to(MATRIX container, MATRIX indices){
     MATRIX* splited = NULL;
     MATRIX* new_indices = not_in_sequence(indices, container.cols_len);
