@@ -15,6 +15,8 @@ typedef struct MATRIX{
 
 
 MATRIX* Matrix(int,int,float);
+MATRIX* identityOf(int);
+MATRIX* copy(MATRIX);
 void fmatrix(MATRIX*);
 void pmatrix(MATRIX);
 

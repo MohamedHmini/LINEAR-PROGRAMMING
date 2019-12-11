@@ -75,7 +75,6 @@ FILE_CONTENT read_lines(FILE *file){
 
 void FC_free(FILE_CONTENT fc){
     for(int i = 0;i<fc.r; i++){
-        printf("%s\n",fc.content[i]);
         free(fc.content[i]);
     }
     free(fc.content);

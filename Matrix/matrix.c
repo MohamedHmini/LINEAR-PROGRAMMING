@@ -28,12 +28,41 @@ MATRIX *Matrix(int rows, int cols, float init_val){
 }
 
 
-void fmatrix(MATRIX *m){
-    for (int i = 0; i < m->rows_len; i++){
-        free(m->data[i]); 
+MATRIX* identityOf(int rank){
+    MATRIX *identity = Matrix(rank, rank, 0);
+
+    for (int i = 0; i < rank; i++){
+        for (int j = 0; j < rank; j++){
+            if(i == j)
+                identity->data[i][j] = 1;
+        }        
     }
-    free(m->data);
-    free(m);
+
+    return identity;
+}
+
+
+MATRIX* copy(MATRIX m){
+    MATRIX* c  = Matrix(m.rows_len, m.cols_len, 0);
+
+    for (int i = 0; i < m.rows_len; i++){
+        for (int j = 0; j < m.cols_len; j++){
+            c->data[i][j] = m.data[i][j];
+        }        
+    }
+
+    return c;
+}
+
+void fmatrix(MATRIX *m){
+    if(m != NULL){
+        for (int i = 0; i < m->rows_len; i++){
+            free(m->data[i]); 
+        }
+        free(m->data);
+        free(m);
+        m = NULL;
+    }
 }
 
 
@@ -174,7 +203,52 @@ float det(MATRIX m){
 
 
 MATRIX* inv(MATRIX A){
-    MATRIX* Ai = Matrix(A.rows_len, A.cols_len, 0);
-    // magic ...
+    int rank = A.rows_len;
+    MATRIX* Ac = copy(A);
+    MATRIX* Ai = identityOf(rank);
+    
+    for (int i = 0; i < rank; i++){
+        ////// pivoting : //////////////// 
+        MATRIX* p = identityOf(rank);
+        p->data[i][i] = 1/Ac->data[i][i];
+
+        MATRIX* Acc = copy(*Ac);
+        fmatrix(Ac);
+        Ac = dot(*p, *Acc);
+        fmatrix(Acc);
+
+        MATRIX* c = copy(*Ai);
+        fmatrix(Ai);
+        Ai = dot(*p, *c);
+
+        fmatrix(c);
+        fmatrix(p);  
+        ///////////////////////////////
+
+        ////// elimination : /////////////
+
+        for (int j = 0; j < rank; j++){
+            if(i != j){
+                MATRIX* e = identityOf(rank);
+                e->data[j][i] = -Ac->data[j][i];
+                MATRIX* Acc = copy(*Ac);
+                fmatrix(Ac);
+                Ac = dot(*e, *Acc);
+                fmatrix(Acc);
+                // pmatrix(*e);
+                MATRIX* c = copy(*Ai);
+                fmatrix(Ai);
+                Ai = dot(*e, *c);
+
+                fmatrix(c);
+                fmatrix(e);
+            }
+        }
+        
+        /////////////////////////////////
+
+    }
+
+    fmatrix(Ac);
     return Ai;
 }

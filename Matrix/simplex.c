@@ -43,12 +43,12 @@ LINEAR_PROGRAM file_to_LP(char* file_path){
     while(i < nbr_of_matrices){
         fline  = tokenize_line(fc.content[current_m]);
         matrices[i] = load_matrix(fc.content, (int)fline[0], (int)fline[1], current_m + 1);
-        pmatrix(*matrices[i]);
         current_m += fline[0] + 1;
         free(fline);
         i++;
     }
 
+    lp.A = NULL;
     lp.B = matrices[0];
     lp.R = matrices[1];
     lp.c = matrices[2];
@@ -73,6 +73,7 @@ LINEAR_PROGRAM file_to_LP(char* file_path){
 
 
 void fLP(LINEAR_PROGRAM *s){
+    fmatrix(s->A);
     fmatrix(s->B);
     fmatrix(s->R);
     fmatrix(s->c);
