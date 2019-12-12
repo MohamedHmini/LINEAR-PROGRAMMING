@@ -27,8 +27,12 @@ P.S : Examples are given in the datasets folder!
 
 1- compile the program using gcc in the following way :
 
-```bash  gcc -o main ./Matrix/io.c ./Matrix/matrix.c ./simplex.c ./test.c ```
+```bash  
+gcc -o main ./Matrix/io.c ./Matrix/matrix.c ./simplex.c ./test.c 
+```
 
 2- run the executable main file in the following way : 
 
-```bash ./main <problem set file path>```
+```bash
+ ./main <problem set file path>
+ ```
