@@ -171,6 +171,22 @@ MATRIX* sub(MATRIX A, MATRIX B){
 }
 
 
+MATRIX* divide(MATRIX A, MATRIX B){
+    if(A.cols_len != B.cols_len || A.rows_len != B.rows_len)
+        return NULL;
+
+    MATRIX *m = Matrix(A.rows_len, A.cols_len, 0);
+
+    for (int i = 0; i < m->rows_len; i++){
+        for (int j = 0; j < m->cols_len; j++){
+            m->data[i][j] = A.data[i][j] / B.data[i][j];
+        }        
+    }
+
+    return m; 
+}
+
+
 
 MATRIX* merge_cols(MATRIX A, MATRIX B){
     if(A.rows_len != B.rows_len)
@@ -333,4 +349,101 @@ MATRIX* split_cols(MATRIX container, MATRIX indices, int belongs){
         splited = __split_cols_which_do_not_belong_to(container, indices);
 
     return splited;
+}
+
+
+MATRIX* remove_col(MATRIX A, int index){
+    MATRIX* B = Matrix(A.rows_len, A.cols_len - 1, 0);
+    int countj = 0;
+    pmatrix(A);
+    pmatrix(*B);
+    for (int i = 0; i < A.rows_len; i++){
+        countj = 0;
+        for (int j = 0; j < A.cols_len; j++){
+            if(j != index){
+                B->data[i][countj] = A.data[i][j];
+                countj++;
+            }
+        }
+    }
+    
+    return B;
+}
+
+
+MATRIX* get_col(MATRIX A, int index){
+    MATRIX* B = Matrix(A.rows_len, 1, 0);
+
+    for (int i = 0; i < A.rows_len; i++){
+        B->data[i][0] = A.data[i][index];
+    }
+    
+    return B;
+}
+
+
+void switch_cols(MATRIX* A, MATRIX* B, int a, int b){
+    
+    for (int i = 0; i < A->rows_len; i++){
+        float tmp;
+        tmp = A->data[i][a];
+        A->data[i][a] = B->data[i][b];
+        B->data[i][b] = tmp;
+    }
+    
+}
+
+CMP_RESULT min(MATRIX A){
+    CMP_RESULT cr;
+    cr.val = A.data[0][0];
+    cr.index = 0;
+
+    for (int i = 0; i < A.rows_len; i++){
+        if(A.data[i][0] < cr.val){
+            cr.val = A.data[i][0];
+            cr.index = i;
+        }  
+    } 
+
+    return cr;
+}
+
+
+CMP_RESULT max(MATRIX A){
+    CMP_RESULT cr;
+    cr.val = A.data[0][0];
+    cr.index = 0;
+
+    for (int i = 0; i < A.rows_len; i++){
+        if(A.data[i][0] > cr.val){
+            cr.val = A.data[i][0];
+            cr.index = i;
+        }  
+    } 
+
+    return cr;
+}
+
+float sum(MATRIX A){
+    float s = 0;
+
+    for (int i = 0; i < A.rows_len; i++){
+        for (int j = 0; j < A.cols_len; j++){
+            s += A.data[i][j];
+        }        
+    } 
+
+    return s;
+}
+
+float product(MATRIX A){
+    float p = 1;
+
+    for (int i = 0; i < A.rows_len; i++){
+        for (int j = 0; j < A.cols_len; j++){
+            p *= A.data[i][j];
+        }        
+    } 
+
+    return p;
 }

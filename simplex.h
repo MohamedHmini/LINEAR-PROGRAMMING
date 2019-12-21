@@ -1,3 +1,4 @@
+#include<stdbool.h>
 #include "./Matrix/matrix.h"
 
 
@@ -14,15 +15,18 @@ typedef struct LINEAR_PROGRAM{
     MATRIX* cb;
     MATRIX* cr;
     MATRIX* basis_indices;
+    MATRIX* not_basis_indices;
+    bool optimal;
 }LINEAR_PROGRAM;
 
 
 
 LINEAR_PROGRAM file_to_LP(char*);
-void refine_LP(LINEAR_PROGRAM*);
 MATRIX* load_matrix(char**, int, int, int);
-void refine_LP(LINEAR_PROGRAM*);
-void ptableau(LINEAR_PROGRAM);
+void refine_LP(LINEAR_PROGRAM*, int);
+int current_simplex(LINEAR_PROGRAM*);
+int next_simplex(LINEAR_PROGRAM*, MATRIX, MATRIX, MATRIX);
+void run_simplex(LINEAR_PROGRAM*);
 void fLP(LINEAR_PROGRAM*);
 
 #endif

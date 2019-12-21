@@ -74,11 +74,16 @@ LINEAR_PROGRAM file_to_LP(char* file_path){
 }
 
 
-void refine_LP(LINEAR_PROGRAM *lp){
+void refine_LP(LINEAR_PROGRAM *lp, int i){
+    if(i == 1){
+        lp->not_basis_indices = not_in_sequence(*lp->basis_indices, lp->A->cols_len);
+        
+    }
     lp->B = split_cols(*lp->A, *lp->basis_indices, 1);
     lp->R = split_cols(*lp->A, *lp->basis_indices, 0);
     lp->cb = split_cols(*lp->c, *lp->basis_indices, 1);
     lp->cr = split_cols(*lp->c, *lp->basis_indices, 0);
+    
 }
 
 
@@ -139,34 +144,95 @@ void __ptableau_footer(LINEAR_PROGRAM lp, MATRIX not_base, MATRIX j, MATRIX ib){
 
 }
 
-void ptableau(LINEAR_PROGRAM lp){
-    MATRIX* not_base = not_in_sequence(*lp.basis_indices, lp.A->cols_len);
-    MATRIX* Bi = inv(*lp.B);
-    MATRIX* BiR = dot(*Bi, *lp.R);
-    MATRIX* bt = T(*lp.b);
+int current_simplex(LINEAR_PROGRAM *lp){
+    // pmatrix(*lp->cb);
+    // pmatrix(*lp->cr);
+    MATRIX* Bi = inv(*lp->B);
+    MATRIX* BiR = dot(*Bi, *lp->R);
+    MATRIX* bt = T(*lp->b);
     MATRIX* Bib = dot(*Bi, *bt);
-    MATRIX* i = dot(*lp.cb, *Bi);
-    MATRIX* iR = dot(*i, *lp.R);
-    MATRIX* j = sub(*lp.cr, *iR);
+    MATRIX* i = dot(*lp->cb, *Bi);
+    MATRIX* iR = dot(*i, *lp->R);
+    MATRIX* j = sub(*lp->cr, *iR);
     MATRIX* ib = dot(*i, *bt);
     ib->data[0][0] *= -1;
 
     printf("\n");
-    __ptableau_header(lp,*not_base);
-    __ptableau_section(lp,*not_base, *BiR, *Bib);
-    __ptableau_footer(lp,*not_base, *j, *ib);
+    __ptableau_header(*lp,*lp->not_basis_indices);
+    __ptableau_section(*lp,*lp->not_basis_indices, *BiR, *Bib);
+    __ptableau_footer(*lp,*lp->not_basis_indices, *j, *ib);
     printf("\n\n");
+    MATRIX* jt = T(*j);
+    fmatrix(jt);
+    int r = next_simplex(lp, *j, *BiR, *Bib);
 
     fmatrix(j);
     fmatrix(i);
     fmatrix(iR);
     fmatrix(ib);
-    fmatrix(not_base);
     fmatrix(bt);
     fmatrix(Bi);
     fmatrix(BiR);
     fmatrix(Bib);
+    
+    return r;
 }
+
+
+int next_simplex(LINEAR_PROGRAM *lp, MATRIX j, MATRIX a, MATRIX b){
+    // take the min of the objective function co-effecients : (the entering variable)
+    MATRIX* jt = T(j);
+    CMP_RESULT mnj = min(*jt);
+    if(mnj.val >= 0){
+        lp->optimal = true;
+        return 0;
+    }
+    // take the min of the bi/ai : (the leaving variable)
+    MATRIX* ai = get_col(a, (int)mnj.index);
+    MATRIX* ab = divide(b,*ai);
+
+    CMP_RESULT mnab = min(*ab);
+
+    // change of basis : 
+    float tmp = lp->basis_indices->data[0][(int)mnab.index];
+    lp->basis_indices->data[0][(int)mnab.index] = lp->not_basis_indices->data[0][(int)mnj.index];
+    lp->not_basis_indices->data[0][(int)mnj.index] = tmp;
+
+    tmp = lp->cb->data[0][(int)mnab.index];
+    lp->cb->data[0][(int)mnab.index] = lp->cr->data[0][(int)mnj.index];
+    lp->cr->data[0][(int)mnj.index] = tmp;
+
+    // changing the linear programe : 
+
+    fmatrix(lp->B);
+    fmatrix(lp->R);
+    fmatrix(lp->b);
+
+    lp->B = identityOf(lp->basis_indices->cols_len);
+    lp->R = copy(a);
+    switch_cols(lp->B, lp->R, (int)mnab.index, (int)mnj.index);
+
+    MATRIX* bt = T(b);
+    lp->b = bt;
+
+    // refine_LP(lp, 0);
+
+    fmatrix(jt);
+    fmatrix(ab);
+    fmatrix(ai);
+    // pmatrix(*lp->B);
+    // pmatrix(*lp->R);
+    // pmatrix(*lp->b);
+    return 1;
+}
+
+
+void run_simplex(LINEAR_PROGRAM *lp){
+    refine_LP(lp, 1);
+    // int iter = 1;
+    while(current_simplex(lp)){};
+}
+
 
 void fLP(LINEAR_PROGRAM *s){
     fmatrix(s->A);
@@ -177,4 +243,5 @@ void fLP(LINEAR_PROGRAM *s){
     fmatrix(s->cr);
     fmatrix(s->b);
     fmatrix(s->basis_indices);
+    fmatrix(s->not_basis_indices);
 }
