@@ -6,9 +6,6 @@
 
 
 
-// FILE TO SIMPLEX WORKS AS FOLLOWS : 
-    // -> 
-    // ->
 
 MATRIX* load_matrix(char** content, int rows, int cols, int startwith){
 
@@ -187,6 +184,7 @@ int next_simplex(LINEAR_PROGRAM *lp, MATRIX j, MATRIX a, MATRIX b){
         lp->optimal = true;
         return 0;
     }
+
     // take the min of the bi/ai : (the leaving variable)
     MATRIX* ai = get_col(a, (int)mnj.index);
     MATRIX* ab = divide(b,*ai);
@@ -202,8 +200,7 @@ int next_simplex(LINEAR_PROGRAM *lp, MATRIX j, MATRIX a, MATRIX b){
     lp->cb->data[0][(int)mnab.index] = lp->cr->data[0][(int)mnj.index];
     lp->cr->data[0][(int)mnj.index] = tmp;
 
-    // changing the linear programe : 
-
+    // changing the linear programe :
     fmatrix(lp->B);
     fmatrix(lp->R);
     fmatrix(lp->b);
@@ -215,14 +212,11 @@ int next_simplex(LINEAR_PROGRAM *lp, MATRIX j, MATRIX a, MATRIX b){
     MATRIX* bt = T(b);
     lp->b = bt;
 
-    // refine_LP(lp, 0);
 
     fmatrix(jt);
     fmatrix(ab);
     fmatrix(ai);
-    // pmatrix(*lp->B);
-    // pmatrix(*lp->R);
-    // pmatrix(*lp->b);
+    
     return 1;
 }
 
