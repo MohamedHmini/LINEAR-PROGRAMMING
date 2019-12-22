@@ -108,15 +108,15 @@ void __ptableau_section(LINEAR_PROGRAM lp, MATRIX not_base, MATRIX BiR, MATRIX B
         printf("|% 7s%d|","X",(int)lp.basis_indices->data[0][i] + 1);
         
         for (int j = 0 ; j<lp.basis_indices->cols_len; j++){
-            printf("%8.1f|", identity->data[i][j]);
+            printf("%8.2f|", identity->data[i][j]);
         }
 
         for (int j = 0 ; j<BiR.cols_len; j++){
-            printf("%8.1f|", BiR.data[i][j]);
+            printf("%8.2f|", BiR.data[i][j]);
         }
 
-        printf("%8.1f|", 0.0);
-        printf("%8.1f|", Bib.data[i][0]);        
+        printf("%8.2f|", 0.0);
+        printf("%8.2f|", Bib.data[i][0]);        
 
         printf("\n");
     }
@@ -129,21 +129,19 @@ void __ptableau_footer(LINEAR_PROGRAM lp, MATRIX not_base, MATRIX j, MATRIX ib){
     printf("|% 8s|","-Z");
 
     for (int i = 0 ; i<lp.basis_indices->cols_len; i++){
-        printf("%8.1f|", 0.0);
+        printf("%8.2f|", 0.0);
     }
 
     for(int i = 0;i<not_base.cols_len;i++){
-        printf("%8.1f|", j.data[0][i]);
+        printf("%8.2f|", j.data[0][i]);
     }
 
-    printf("%8.1f|", 1.0);
-    printf("%8.1f|", ib.data[0][0]);
+    printf("%8.2f|", 1.0);
+    printf("%8.2f|", ib.data[0][0]);
 
 }
 
 int current_simplex(LINEAR_PROGRAM *lp){
-    // pmatrix(*lp->cb);
-    // pmatrix(*lp->cr);
     MATRIX* Bi = inv(*lp->B);
     MATRIX* BiR = dot(*Bi, *lp->R);
     MATRIX* bt = T(*lp->b);
@@ -180,11 +178,13 @@ int next_simplex(LINEAR_PROGRAM *lp, MATRIX j, MATRIX a, MATRIX b){
     // take the min of the objective function co-effecients : (the entering variable)
     MATRIX* jt = T(j);
     CMP_RESULT mnj = min(*jt);
+    
     if(mnj.val >= 0){
         lp->optimal = true;
+        fmatrix(jt);
         return 0;
     }
-
+    
     // take the min of the bi/ai : (the leaving variable)
     MATRIX* ai = get_col(a, (int)mnj.index);
     MATRIX* ab = divide(b,*ai);
@@ -223,8 +223,11 @@ int next_simplex(LINEAR_PROGRAM *lp, MATRIX j, MATRIX a, MATRIX b){
 
 void run_simplex(LINEAR_PROGRAM *lp){
     refine_LP(lp, 1);
-    // int iter = 1;
-    while(current_simplex(lp)){};
+    int iter = 1;
+    do{
+        printf("ITER %d : ", iter);
+        iter++;
+    }while(current_simplex(lp));
 }
 
 
