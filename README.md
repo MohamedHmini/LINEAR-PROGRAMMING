@@ -1,7 +1,7 @@
 # LINEAR-PROGRAMMING
 
 
-# STRUCTURE OF THE PROBLEM SET FILE : 
+### STRUCTURE OF THE PROBLEM SET FILE : 
 
     nbr of matrices (for now it should be only the value 4)!!!
     n m (dimensions of matrix A)
@@ -15,7 +15,7 @@
 
 P.S : Examples are given in the datasets folder!
 
-# STEPS : 
+### STEPS : 
 
 1- compile the program using gcc in the following way :
 
